@@ -1,0 +1,6 @@
+# Configuração real com tokens e dados sensíveis — NUNCA subir
+config.gs
+
+# Credenciais do clasp e configuração local de projeto
+.clasprc.json
+.clasp.json

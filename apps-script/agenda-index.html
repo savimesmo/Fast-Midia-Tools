@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendamento Fast Mídia</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0F0F13;
+    --surface:   #1A1A24;
+    --surface2:  #22222F;
+    --border:    #2E2E40;
+    --text:      #E8E8F0;
+    --muted:     #7878A0;
+    --accent:    #7C3AED;
+    --accent-lt: #9F67FF;
+    --livre:     #10B981;
+    --ocupado:   #EF4444;
+    --radius:    10px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  .user-badge { font-size: 12px; color: var(--muted); }
+
+  /* NAV DA SEMANA */
+  .week-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .week-label { font-weight: 600; font-size: 15px; flex: 1; }
+  .btn-nav {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.15s;
+  }
+  .btn-nav:hover { background: var(--border); }
+
+  /* LEGENDA */
+  .legend {
+    display: flex;
+    gap: 20px;
+    padding: 10px 24px;
+    font-size: 12px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-pill {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+  }
+
+  /* GRID */
+  .agenda-wrap { padding: 20px 24px; overflow-x: auto; }
+
+  table.agenda {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+
+  table.agenda th {
+    background: var(--surface);
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    position: sticky;
+    top: 57px;
+    z-index: 10;
+  }
+  table.agenda th.col-slot { width: 130px; text-align: left; padding-left: 12px; }
+  table.agenda th.col-dia { color: var(--text); }
+  table.agenda th.col-dia.hoje { color: var(--accent-lt); }
+  .dia-num { font-size: 22px; font-weight: 700; display: block; line-height: 1.1; }
+  .dia-nome { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  table.agenda td {
+    border: 1px solid var(--border);
+    vertical-align: middle;
+    padding: 8px 6px;
+    background: var(--surface2);
+  }
+  table.agenda td.col-slot {
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    vertical-align: middle;
+    padding: 8px 12px;
+    white-space: nowrap;
+  }
+
+  /* PILLS DE FAST — Layout B */
+  .fast-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+  }
+
+  .fpill {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    border: 2px solid transparent;
+    cursor: default;
+    transition: transform 0.12s, filter 0.12s;
+    user-select: none;
+    position: relative;
+    letter-spacing: 0;
+  }
+
+  .fpill-livre {
+    cursor: pointer;
+  }
+  .fpill-livre:hover {
+    transform: scale(1.15);
+    filter: brightness(1.3);
+    z-index: 2;
+  }
+
+  .fpill-ocupado {
+    background: rgba(239,68,68,.1) !important;
+    border-color: rgba(239,68,68,.3) !important;
+    color: rgba(239,68,68,.55) !important;
+    font-size: 16px;
+  }
+
+  .fpill-sem_acesso {
+    opacity: 0.35;
+    font-size: 14px;
+  }
+  .fpill-erro {
+    background: rgba(120,120,160,.08) !important;
+    border-color: rgba(120,120,160,.18) !important;
+    color: rgba(120,120,160,.35) !important;
+    font-size: 14px;
+  }
+
+  .fpill-carregando {
+    background: rgba(120,120,160,.15) !important;
+    border-color: rgba(120,120,160,.3) !important;
+    color: rgba(120,120,160,.5) !important;
+    animation: pulse-pill 1.1s ease-in-out infinite;
+  }
+  @keyframes pulse-pill {
+    0%, 100% { opacity: .5; }
+    50%       { opacity: 1; }
+  }
+
+  /* LOADING */
+  .loading-row td { text-align: center; padding: 32px; color: var(--muted); }
+  .spinner {
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* MODAL */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    width: 440px;
+    max-width: 95vw;
+    box-shadow: 0 24px 64px rgba(0,0,0,.5);
+    animation: modal-in .18s ease;
+  }
+  @keyframes modal-in { from { opacity:0; transform: scale(.95) translateY(8px); } to { opacity:1; transform: none; } }
+
+  .modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+  .modal-title { font-size: 17px; font-weight: 700; }
+  .modal-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .btn-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; padding: 2px; }
+  .btn-close:hover { color: var(--text); }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color .15s;
+    outline: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-select option { background: var(--surface2); }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  .fast-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid;
+  }
+  .fast-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, opacity .15s;
+    margin-top: 4px;
+  }
+  .btn-primary:hover { background: var(--accent-lt); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 14px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toast-in .2s ease;
+    max-width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  }
+  @keyframes toast-in { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: none; } }
+  .toast.sucesso { border-color: var(--livre); }
+  .toast.erro { border-color: var(--ocupado); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Agendamento Fast Mídia
+  </div>
+  <div class="user-badge" id="user-badge">carregando...</div>
+</header>
+
+<div class="week-nav">
+  <button class="btn-nav" onclick="semanaAnterior()">← Semana anterior</button>
+  <div class="week-label" id="week-label">–</div>
+  <button class="btn-nav" onclick="proximaSemana()">Próxima semana →</button>
+  <button class="btn-nav" onclick="irParaHoje()" style="margin-left:auto;">Hoje</button>
+</div>
+
+<div class="legend" id="legenda">
+  <span style="font-size:12px;color:var(--muted)">Legenda:</span>
+</div>
+
+<div class="agenda-wrap">
+  <table class="agenda" id="tabela-agenda">
+    <thead id="thead-agenda"></thead>
+    <tbody id="tbody-agenda"></tbody>
+  </table>
+</div>
+
+<!-- MODAL DE AGENDAMENTO -->
+<div class="modal-backdrop" id="modal" onclick="fecharModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Novo Agendamento</div>
+        <div class="modal-sub" id="modal-sub">–</div>
+      </div>
+      <button class="btn-close" onclick="fecharModal()">×</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Fast responsável</label>
+      <div id="modal-fast-pill"></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Nome do cliente *</label>
+      <div style="display:flex;gap:8px">
+        <input class="form-input" id="campo-cliente" type="text" placeholder="Ex: Banco Bradesco" autocomplete="off" oninput="resetarVerificacao()">
+        <button class="btn-nav" id="btn-verificar" onclick="verificarCliente()" style="white-space:nowrap;flex-shrink:0">Verificar pasta</button>
+      </div>
+    </div>
+
+    <div id="drive-resultado" style="display:none;margin-bottom:16px;padding:12px;border-radius:8px;font-size:13px;line-height:1.5"></div>
+
+    <div class="form-group" id="grupo-similares" style="display:none">
+      <label class="form-label" id="label-similar">Selecionar pasta existente</label>
+      <select class="form-select" id="select-similar" onchange="selecionarSimilar()">
+        <option value="">— escolha uma pasta —</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">WhatsApp do analista/account *</label>
+      <input class="form-input" id="campo-wa-analista" type="tel" placeholder="5592999998888 (DDI+DDD+número, sem espaços)">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Observações iniciais</label>
+      <textarea class="form-textarea" id="campo-obs" placeholder="Informações do job, tipo de conteúdo, instruções especiais…"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Prazo para entrega do material bruto *</label>
+      <input class="form-input" id="campo-prazo-material" type="date">
+    </div>
+
+    <div style="background:rgba(120,120,160,.07);border:1px solid var(--border);border-radius:8px;padding:14px 14px 6px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text)">🎬 Agendamento de Edição (obrigatório)</div>
+      <div class="form-group">
+        <label class="form-label">Data da edição *</label>
+        <input class="form-input" id="campo-data-edicao" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bloco da edição *</label>
+        <select class="form-select" id="campo-bloco-edicao">
+          <option value="">— escolha —</option>
+          <option value="manha">Manhã (08:00 – 12:00)</option>
+          <option value="tarde">Tarde (13:00 – 17:00)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btn-confirmar" onclick="confirmarAgendamento()" disabled>
+      Criar agendamento
+    </button>
+  </div>
+</div>
+
+<script>
+// ── Estado ─────────────────────────────────────────────────
+let config = null;
+let disponibilidade = null;
+let semanaBase = null;
+let selecao = null;
+
+// Slots fixos no frontend — não dependem do servidor
+var SLOTS = [
+  { label: '08:00 – 12:00', inicio: 8,  fim: 12 },
+  { label: '13:00 – 17:00', inicio: 13, fim: 17 },
+];
+
+// ── Inicialização ───────────────────────────────────────────
+window.onload = function() {
+  semanaBase = getSegundaFeira(new Date());
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    document.getElementById('tbody-agenda').innerHTML =
+      '<tr><td colspan="6" style="padding:40px 24px;text-align:center;">' +
+      '<div style="font-size:15px;font-weight:600;margin-bottom:8px;">⚠️ Abra via Google Apps Script</div>' +
+      '<div style="color:var(--muted);font-size:13px">O arquivo .html não funciona diretamente no navegador.</div>' +
+      '</td></tr>';
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function(cfg) {
+      config = cfg;
+      construirLegenda();
+      carregarSemana();
+    })
+    .withFailureHandler(mostrarErro)
+    .getConfigPublica();
+
+  google.script.run
+    .withSuccessHandler(function(email) {
+      document.getElementById('user-badge').textContent = email || 'conta Google';
+    })
+    .getUsuarioAtual();
+};
+
+// ── Legenda dinâmica ────────────────────────────────────────
+function construirLegenda() {
+  if (!config) return;
+  const leg = document.getElementById('legenda');
+  let html = '<span style="font-size:12px;color:var(--muted)">Clique para agendar:</span>';
+  Object.keys(config.fasts).forEach(function(nome) {
+    const cor = config.fasts[nome].cor || '#888';
+    const ini = getIniciais(nome);
+    html += '<div class="legend-item">'
+      + '<div class="legend-pill" style="background:' + cor + '22;border:2px solid ' + cor + ';color:' + cor + '">' + ini + '</div>'
+      + '<span>' + nome + '</span></div>';
+  });
+  html += '<div class="legend-item">'
+    + '<div class="legend-pill" style="background:rgba(239,68,68,.1);border:2px solid rgba(239,68,68,.3);color:rgba(239,68,68,.55);font-size:15px">×</div>'
+    + '<span style="color:var(--muted)">Ocupado</span></div>';
+  html += '<div class="legend-item">'
+    + '<div class="legend-pill" style="background:rgba(120,120,160,.08);border:2px solid rgba(120,120,160,.18);color:rgba(120,120,160,.35);font-size:14px">?</div>'
+    + '<span style="color:var(--muted)">Sem acesso</span></div>';
+  leg.innerHTML = html;
+}
+
+// ── Navegação de semana ─────────────────────────────────────
+function semanaAnterior() { semanaBase = new Date(semanaBase.getTime() - 7 * 86400000); carregarSemana(); }
+function proximaSemana()  { semanaBase = new Date(semanaBase.getTime() + 7 * 86400000); carregarSemana(); }
+function irParaHoje()     { semanaBase = getSegundaFeira(new Date()); carregarSemana(); }
+
+function getSegundaFeira(dt) {
+  const d = new Date(dt);
+  const dia = d.getDay();
+  // domingo (0) → avança para próxima segunda (início da nova semana)
+  const diff = dia === 0 ? 1 : 1 - dia;
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+// ── Carrega semana ─────────────────────────────────────────────────
+// Dispara uma chamada por Fast em paralelo → grid aparece imediatamente,
+// pills pulsam enquanto carregam e atualizam individualmente ao chegar.
+function carregarSemana() {
+  disponibilidade = null;
+  atualizarLabelSemana();
+  renderizarEsqueleto();
+
+  google.script.run
+    .withSuccessHandler(function(dados) {
+      disponibilidade = dados;
+      renderizarGrid(dados);
+    })
+    .withFailureHandler(mostrarErro)
+    .getDisponibilidade(formatDate(semanaBase));
+}
+
+function atualizarLabelSemana() {
+  const fim = new Date(semanaBase.getTime() + 4 * 86400000);
+  document.getElementById('week-label').textContent = formatBR(semanaBase) + ' – ' + formatBR(fim);
+}
+
+function renderizarEsqueleto() {
+  const hoje = formatDate(new Date());
+  const thead = document.getElementById('thead-agenda');
+  const tbody = document.getElementById('tbody-agenda');
+  const dias = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(semanaBase.getTime() + i * 86400000);
+    dias.push({ iso: formatDate(d), dt: d });
+  }
+  thead.innerHTML = '<tr><th class="col-slot">Horário</th>' +
+    dias.map(function(d) {
+      const eh = d.iso === hoje ? ' hoje' : '';
+      return '<th class="col-dia' + eh + '">'
+        + '<span class="dia-num">' + d.dt.getDate() + '</span>'
+        + '<span class="dia-nome">' + nomeDiaSemana(d.dt) + '</span>'
+        + '</th>';
+    }).join('') + '</tr>';
+  tbody.innerHTML = '<tr class="loading-row"><td colspan="6"><div class="spinner"></div>carregando...</td></tr>';
+}
+
+// Renderiza grid com pills pulsando (antes dos dados chegarem)
+function renderizarGridComEsqueleto() {
+  if (!config) return;
+  const tbody = document.getElementById('tbody-agenda');
+  const dias = [];
+  for (let i = 0; i < 5; i++) {
+    dias.push(formatDate(new Date(semanaBase.getTime() + i * 86400000)));
+  }
+  let html = '';
+  SLOTS.forEach(function(slot) {
+    html += '<tr><td class="col-slot">' + slot.label + '</td>';
+    dias.forEach(function(diaIso) {
+      html += '<td><div class="fast-pills">';
+      Object.keys(config.fasts).forEach(function(nome) {
+        html += '<div class="fpill fpill-carregando"'
+          + ' data-pf="' + escaparAttr(nome) + '"'
+          + ' data-pd="' + diaIso + '"'
+          + ' data-ps="' + escaparAttr(slot.label) + '"'
+          + ' data-si="' + slot.inicio + '"'
+          + ' data-sf="' + slot.fim + '"'
+          + ' title="' + escaparAttr(nome) + ': carregando…">'
+          + getIniciais(nome) + '</div>';
+      });
+      html += '</div></td>';
+    });
+    html += '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+// Atualiza as pills de UM Fast quando os dados chegam
+function atualizarPillsFast(fastNome, dadosFast) {
+  const cor    = config.fasts[fastNome] && config.fasts[fastNome].cor || '#888';
+  const ini    = getIniciais(fastNome);
+  const erroGl = dadosFast && dadosFast.status === 'sem_acesso';
+
+  document.querySelectorAll('.fpill[data-pd]').forEach(function(pill) {
+    if (pill.dataset.pf !== fastNome) return;
+    const dia  = pill.dataset.pd;
+    const slot = pill.dataset.ps;
+    var si = parseInt(pill.dataset.si, 10);
+    var sf = parseInt(pill.dataset.sf, 10);
+
+    var info   = (!erroGl && dadosFast[dia] && dadosFast[dia][si]) || { status: 'sem_acesso' };
+    var status = info.status || 'sem_acesso';
+    var conteudo = ini, tooltip = fastNome, estilo = '';
+
+    if (status === 'livre') {
+      estilo  = 'background:' + cor + '22;border-color:' + cor + ';color:' + cor + ';';
+      tooltip = fastNome;
+    } else if (status === 'ocupado') {
+      conteudo = '×'; // ×
+      tooltip  = fastNome + (info.eventos && info.eventos.length
+        ? ': ' + info.eventos.map(function(e) { return e.titulo + ' ' + e.inicio + '-' + e.fim; }).join(', ')
+        : ': ocupado');
+    } else {
+      conteudo = ini;
+      tooltip  = fastNome + ': calendário não compartilhado';
+      estilo   = 'background:' + cor + '18;border-color:' + cor + '44;color:' + cor + '66;';
+      status   = 'sem_acesso';
+    }
+
+    pill.className    = 'fpill fpill-' + status;
+    pill.style.cssText = estilo;
+    pill.title        = tooltip;
+    pill.textContent  = conteudo;
+
+    if (status === 'livre') {
+      pill.onclick = (function(fn, d, sl, si2, sf2, c) {
+        return function() { abrirModal(fn, d, sl, si2, sf2, c); };
+      })(fastNome, dia, slot, si, sf, cor);
+      pill.style.cursor = 'pointer';
+    } else {
+      pill.onclick = null;
+      pill.style.cursor = 'default';
+    }
+  });
+}
+
+// ── Grid Layout B — pills por slot ─────────────────────────
+function renderizarGrid(dados) {
+  if (!config) return;
+  const tbody = document.getElementById('tbody-agenda');
+  const dias = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(semanaBase.getTime() + i * 86400000);
+    dias.push(formatDate(d));
+  }
+
+  // Lista de nomes de Fasts — união do que o servidor retornou e do config
+  var fastNomes = Object.keys(config.fasts || {});
+
+  let html = '';
+  SLOTS.forEach(function(slot, slotIdx) {
+    html += '<tr>';
+    html += '<td class="col-slot">' + slot.label + '</td>';
+
+    dias.forEach(function(diaIso) {
+      html += '<td>';
+      var dDia = dados[diaIso] || {};
+      // tenta as três chaves — usa 'in' para não confundir {} com falsy
+      var celula = (String(slotIdx) in dDia) ? dDia[slotIdx]
+                 : (String(slot.inicio) in dDia) ? dDia[slot.inicio]
+                 : (('s' + slotIdx) in dDia) ? dDia['s' + slotIdx]
+                 : null;
+
+      // Merge: Fasts do celula + Fasts do config (garante que todos apareçam)
+      var nomesMerge = celula ? Object.keys(celula) : [];
+      fastNomes.forEach(function(n) { if (nomesMerge.indexOf(n) === -1) nomesMerge.push(n); });
+
+      if (nomesMerge.length === 0) {
+        html += '<span style="color:var(--muted);font-size:11px;display:block;text-align:center">–</span>';
+      } else {
+        html += '<div class="fast-pills">';
+        nomesMerge.forEach(function(nome) {
+          var info = celula && celula[nome] ? celula[nome] : { status: 'sem_acesso' };
+          var status = info.status || 'erro';
+          var cor = config.fasts[nome] && config.fasts[nome].cor || '#888';
+          var ini = getIniciais(nome);
+
+          var tooltip = nome;
+          var conteudo = ini;
+
+          if (status === 'ocupado') {
+            conteudo = '×';
+            if (info.eventos && info.eventos.length) {
+              tooltip = nome + ': ' + info.eventos.map(function(e) { return e.titulo + ' ' + e.inicio + '-' + e.fim; }).join(', ');
+            } else {
+              tooltip = nome + ': ocupado';
+            }
+          } else if (status === 'sem_acesso') {
+            conteudo = '?';
+            tooltip = nome + ': calendário não compartilhado';
+          } else if (status === 'erro') {
+            conteudo = '!';
+            tooltip = nome + ': erro ao ler calendário';
+          }
+
+          var estilo = status === 'livre'
+            ? 'background:' + cor + '22;border-color:' + cor + ';color:' + cor + ';'
+            : status === 'sem_acesso'
+            ? 'background:' + cor + '11;border-color:' + cor + '44;color:' + cor + ';'
+            : '';
+
+          var clique = status === 'livre'
+            ? ' onclick="abrirModal(\'' + escapar(nome) + '\',\'' + diaIso + '\',\'' + escapar(slot.label) + '\',' + slot.inicio + ',' + slot.fim + ',\'' + cor + '\')"'
+            : '';
+
+          html += '<div class="fpill fpill-' + status + '" style="' + estilo + '" title="' + escaparAttr(tooltip) + '"' + clique + '>'
+            + conteudo + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</td>';
+    });
+    html += '</tr>';
+  });
+
+  tbody.innerHTML = html;
+}
+
+// ── Modal ──────────────────────────────────────────────────
+function abrirModal(fast, dataIso, slotLabel, slotInicio, slotFim, cor) {
+  selecao = { fast, dataIso, slotLabel, slotInicio, slotFim, cor };
+
+  document.getElementById('modal-sub').textContent =
+    nomeDiaSemanaStr(dataIso) + ', ' + formatBRfromIso(dataIso) + ' · ' + slotLabel;
+
+  const pill = document.getElementById('modal-fast-pill');
+  pill.innerHTML = '<span class="fast-pill" style="color:' + cor + ';border-color:' + cor + '20;background:' + cor + '15">'
+    + '<span class="fast-dot" style="background:' + cor + '"></span>' + fast + '</span>';
+
+  document.getElementById('campo-cliente').value = '';
+  document.getElementById('campo-obs').value = '';
+  document.getElementById('btn-confirmar').textContent = 'Criar agendamento';
+  resetarVerificacao();
+
+  document.getElementById('modal').classList.add('open');
+  setTimeout(function() { document.getElementById('campo-cliente').focus(); }, 100);
+}
+
+function fecharModal(ev) {
+  if (ev && ev.target !== document.getElementById('modal')) return;
+  document.getElementById('modal').classList.remove('open');
+}
+
+// ── Verificação Drive ──────────────────────────────────────
+var driveState = { status: null, pastaClienteId: null };
+
+function resetarVerificacao() {
+  driveState = { status: null, pastaClienteId: null };
+  document.getElementById('drive-resultado').style.display = 'none';
+  document.getElementById('grupo-similares').style.display = 'none';
+  document.getElementById('label-similar').textContent = 'Selecionar pasta existente';
+  document.getElementById('btn-confirmar').disabled = true;
+  document.getElementById('btn-confirmar').textContent = 'Criar agendamento';
+}
+
+function verificarCliente() {
+  const cliente = document.getElementById('campo-cliente').value.trim();
+  if (!cliente) return;
+
+  const res = document.getElementById('drive-resultado');
+  res.style.display = 'block';
+  res.style.background = 'rgba(120,120,160,.1)';
+  res.style.border = '1px solid var(--border)';
+  res.innerHTML = '<span class="spinner"></span> Buscando pasta no Drive…';
+  document.getElementById('btn-confirmar').disabled = true;
+  document.getElementById('grupo-similares').style.display = 'none';
+
+  google.script.run
+    .withSuccessHandler(function(r) {
+      driveState = r;
+      if (r.status === 'encontrado') {
+        driveState.pastaClienteId = r.pastaId;
+        res.style.background = 'rgba(16,185,129,.1)';
+        res.style.border = '1px solid rgba(16,185,129,.4)';
+        res.innerHTML = '✅ <strong>Pasta encontrada:</strong> ' + r.nomeCliente +
+          '<br><span style="color:var(--muted);font-size:12px">Subpastas !INSTITUCIONAL/BANCO DE IMAGENS e VÍDEOS serão criadas para este job.</span>';
+        document.getElementById('btn-confirmar').disabled = false;
+      } else if (r.status === 'grupo') {
+        res.style.background = 'rgba(245,158,11,.1)';
+        res.style.border = '1px solid rgba(245,158,11,.4)';
+        res.innerHTML = '📁 <strong>"' + r.nomeGrupo + '"</strong> é uma pasta de grupo. Selecione o sub-cliente:';
+        const sel = document.getElementById('select-similar');
+        sel.innerHTML = '<option value="">— escolha o sub-cliente —</option>';
+        r.subclientes.forEach(function(s) { sel.innerHTML += '<option value="' + s.id + '">' + s.nome + '</option>'; });
+        document.getElementById('label-similar').textContent = 'Selecionar sub-cliente';
+        document.getElementById('grupo-similares').style.display = 'block';
+      } else if (r.status === 'nao_encontrado') {
+        res.style.background = 'rgba(239,68,68,.08)';
+        res.style.border = '1px solid rgba(239,68,68,.3)';
+        if (r.similares && r.similares.length > 0) {
+          res.innerHTML = '⚠️ <strong>"' + cliente + '"</strong> não encontrado. Selecione uma pasta parecida ou confirme sem pasta.';
+          const sel = document.getElementById('select-similar');
+          sel.innerHTML = '<option value="">— escolha uma pasta existente —</option>';
+          r.similares.forEach(function(s) { sel.innerHTML += '<option value="' + s.id + '">' + s.nome + '</option>'; });
+          document.getElementById('grupo-similares').style.display = 'block';
+        } else {
+          res.innerHTML = '⚠️ <strong>"' + cliente + '"</strong> não tem pasta no Drive.' +
+            '<br>Você pode <strong>confirmar mesmo assim</strong> — a supervisora receberá um aviso.';
+        }
+        document.getElementById('btn-confirmar').disabled = false;
+        document.getElementById('btn-confirmar').textContent = 'Criar sem pasta (avisar supervisora)';
+      } else {
+        res.style.background = 'rgba(239,68,68,.08)';
+        res.style.border = '1px solid rgba(239,68,68,.3)';
+        res.innerHTML = '❌ Erro ao acessar o Drive: ' + (r.mensagem || 'verifique as permissões');
+      }
+    })
+    .withFailureHandler(function(err) { res.innerHTML = '❌ Falha: ' + err.message; })
+    .verificarClienteDrive(cliente);
+}
+
+function selecionarSimilar() {
+  const sel = document.getElementById('select-similar');
+  const id = sel.value;
+  if (!id) return;
+  driveState.pastaClienteId = id;
+  driveState.status = 'encontrado';
+  const nome = sel.options[sel.selectedIndex].text;
+  const res = document.getElementById('drive-resultado');
+  res.style.background = 'rgba(16,185,129,.1)';
+  res.style.border = '1px solid rgba(16,185,129,.4)';
+  res.innerHTML = '✅ <strong>Pasta selecionada:</strong> ' + nome;
+  document.getElementById('btn-confirmar').disabled = false;
+  document.getElementById('btn-confirmar').textContent = 'Criar agendamento';
+  document.getElementById('grupo-similares').style.display = 'none';
+}
+
+// ── Confirmar agendamento ──────────────────────────────────
+function confirmarAgendamento() {
+  const cliente = document.getElementById('campo-cliente').value.trim();
+  if (!cliente) {
+    document.getElementById('campo-cliente').style.borderColor = 'var(--ocupado)';
+    document.getElementById('campo-cliente').focus();
+    return;
+  }
+  document.getElementById('campo-cliente').style.borderColor = '';
+
+  const waAnalista    = document.getElementById('campo-wa-analista').value.trim();
+  const prazoMaterial = document.getElementById('campo-prazo-material').value;
+  const dataEdicao    = document.getElementById('campo-data-edicao').value;
+  const blocoEdicao   = document.getElementById('campo-bloco-edicao').value;
+
+  if (!waAnalista)    { toast('⚠️ Informe o WhatsApp do analista.', 'erro'); return; }
+  if (!prazoMaterial) { toast('⚠️ Informe o prazo para entrega do material.', 'erro'); return; }
+  if (!dataEdicao)    { toast('⚠️ Informe a data da edição.', 'erro'); return; }
+  if (!blocoEdicao)   { toast('⚠️ Informe o bloco da edição (manhã ou tarde).', 'erro'); return; }
+
+  const btn = document.getElementById('btn-confirmar');
+  btn.disabled = true;
+  btn.textContent = 'Criando…';
+
+  const dados = {
+    fast:             selecao.fast,
+    cliente:          cliente,
+    dataIso:          selecao.dataIso,
+    slotLabel:        selecao.slotLabel,
+    slotInicio:       selecao.slotInicio,
+    slotFim:          selecao.slotFim,
+    observacoes:      document.getElementById('campo-obs').value.trim(),
+    pastaClienteId:   driveState.pastaClienteId || null,
+    whatsappAnalista: waAnalista,
+    prazoMaterial:    prazoMaterial,
+    dataEdicao:       dataEdicao,
+    blocoEdicao:      blocoEdicao,
+  };
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      if (res.ok) {
+        document.getElementById('modal').classList.remove('open');
+        const msg = res.semPasta
+          ? '✅ Agendamento criado! Supervisora avisada sobre a pasta.'
+          : '✅ Agendamento criado! Fast notificado por WhatsApp.';
+        toast(msg, 'sucesso');
+        carregarSemana();
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Criar agendamento';
+        toast('❌ Erro: ' + res.erro, 'erro');
+      }
+    })
+    .withFailureHandler(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Criar agendamento';
+      toast('❌ Falha: ' + err.message, 'erro');
+    })
+    .criarAgendamento(dados);
+}
+
+// ── Utils ──────────────────────────────────────────────────
+function getIniciais(nome) {
+  const partes = nome.trim().split(/\s+/);
+  if (partes.length === 1) return nome.substring(0, 2).toUpperCase();
+  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+}
+
+function formatDate(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+function formatBR(d)   { return pad(d.getDate()) + '/' + pad(d.getMonth()+1); }
+function formatBRfromIso(iso) { const p = iso.split('-'); return p[2] + '/' + p[1]; }
+function pad(n) { return String(n).padStart(2,'0'); }
+
+const DIAS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const DIAS_FULL = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+function nomeDiaSemana(d) { return DIAS[d.getDay()]; }
+function nomeDiaSemanaStr(iso) { const p = iso.split('-'); return DIAS_FULL[new Date(p[0], p[1]-1, p[2]).getDay()]; }
+
+function escapar(s)     { return String(s).replace(/'/g, "\\'"); }
+function escaparAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+
+function toast(msg, tipo) {
+  const el = document.createElement('div');
+  el.className = 'toast ' + tipo;
+  el.innerHTML = msg;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 4500);
+}
+function mostrarErro(err) { toast('❌ ' + (err.message || err), 'erro'); }
+</script>
+</body>
+</html>
