@@ -74,11 +74,11 @@ function criarAgendamento(dados) {
         dados.dataIso, dados.slotInicio, dados.slotFim, pageId);
     }
 
-    // Bloqueia edição no calendário da supervisora
-    if (dados.dataEdicao && dados.blocoEdicao) {
+    // Bloqueia edição no calendário do Fast
+    if (dados.dataEdicao && dados.blocoEdicao && fastEmail) {
       const edicaoInicio = dados.blocoEdicao === 'manha' ? 8 : 13;
       const edicaoFim    = dados.blocoEdicao === 'manha' ? 12 : 17;
-      adicionarEventoCalendario_(CONFIG.EMAIL_SUPERVISORA,
+      adicionarEventoCalendario_(fastEmail,
         '[Fast Mídia] Edição — ' + dados.cliente,
         dados.dataEdicao, edicaoInicio, edicaoFim, pageId);
     }

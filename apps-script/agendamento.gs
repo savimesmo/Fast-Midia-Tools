@@ -98,7 +98,8 @@ function onCalendarEvent() {
 
 function processarNovoAgendamento_(dados) {
   const { cliente, fast, data, horario, bancoImagensUrl,
-          observacoes, whatsappAnalista, prazoMaterial, dataEdicao, blocoEdicao } = dados;
+          observacoes, prazoMaterial, dataEdicao, blocoEdicao } = dados;
+  let whatsappAnalista = dados.whatsappAnalista;
 
   Logger.log('Novo agendamento: ' + JSON.stringify(dados));
 

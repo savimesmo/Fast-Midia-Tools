@@ -39,7 +39,7 @@ function buscarPastaCliente(nomeCliente) {
 function analisarPastaCliente_(pasta, nomeCliente) {
   const subpastas = listarSubpastas_(pasta.id);
   const temInstitucional = subpastas.some(function(p) {
-    return normalizar_(p.title) === '!institucional';
+    return normalizar_(p.title) === 'institucional';
   });
 
   if (temInstitucional || subpastas.length === 0) {
@@ -73,16 +73,18 @@ function resolverPastaPorId(pastaId, nomeCliente, data, nomeJob) {
 }
 
 function resolverPastaCliente_(pastaClienteId, nomeCliente, data, nomeJob) {
-  const mes = nomeMesPT_(data);
+  const partes = data.split('-');
+  const mesPasta = partes[1] + ' ' + nomeMesPT_(data); // ex: "09 SETEMBRO"
+  const diaMes   = partes[2] + '-' + partes[1];        // ex: "22-09"
   const institucionalId = obterOuCriarSubpasta_(pastaClienteId, '!INSTITUCIONAL');
 
   const bancoId    = obterOuCriarSubpasta_(institucionalId, 'BANCO DE IMAGENS');
-  const bancoMesId = obterOuCriarSubpasta_(bancoId, mes);
-  const bancoJobId = obterOuCriarSubpasta_(bancoMesId, nomeJob);
+  const bancoMesId = obterOuCriarSubpasta_(bancoId, mesPasta);
+  const bancoJobId = obterOuCriarSubpasta_(bancoMesId, diaMes);
 
   const videosId    = obterOuCriarSubpasta_(institucionalId, 'VÍDEOS');
-  const videosMesId = obterOuCriarSubpasta_(videosId, mes);
-  const videosJobId = obterOuCriarSubpasta_(videosMesId, nomeJob);
+  const videosMesId = obterOuCriarSubpasta_(videosId, mesPasta);
+  const videosJobId = obterOuCriarSubpasta_(videosMesId, diaMes);
 
   try {
     DriveApp.getFolderById(bancoJobId).setSharing(
