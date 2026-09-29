@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Fast Mídia</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
+<style>
+.leaflet-image-layer,.leaflet-layer,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-pane,.leaflet-pane>canvas,.leaflet-pane>svg,.leaflet-tile,.leaflet-tile-container,.leaflet-zoom-box{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:0 0}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-bottom,.leaflet-top{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-pan-anim .leaflet-tile,.leaflet-zoom-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-control,.leaflet-popup-pane{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-image-layer,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-image-layer.leaflet-interactive,.leaflet-marker-icon.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:rgba(255,255,255,.5)}.leaflet-container{font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.65);border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:focus,.leaflet-bar a:hover{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px rgba(0,0,0,.4);background:#fff;border-radius:5px}.leaflet-control-layers-toggle{width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-container .leaflet-control-attribution{background:#fff;background:rgba(255,255,255,.8);margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:focus,.leaflet-control-attribution a:hover{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:rgba(255,255,255,.8);text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-bar,.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers{box-shadow:none}.leaflet-touch .leaflet-bar,.leaflet-touch .leaflet-control-layers{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:17px 0;margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px rgba(0,0,0,.4)}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:0 0}.leaflet-container a.leaflet-popup-close-button:focus,.leaflet-container a.leaflet-popup-close-button:hover{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto}.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.4)}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before,.leaflet-tooltip-top:before{position:absolute;pointer-events:none;border:6px solid transparent;background:0 0;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+:root {
+  --bg: #FFFFFF;
+  --surface: #F7F5F5;
+  --text: #1A1A1A;
+  --text-muted: #8A8080;
+  --red-700: #B91C3B;
+  --red-600: #C41E3A;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151010; --surface: #1E1818; --text: #F0EAEA; --text-muted: #877A7A;
+    --red-700: #E85D75; --red-600: #DC2F4A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151010; --surface: #1E1818; --text: #F0EAEA; --text-muted: #877A7A;
+  --red-700: #E85D75; --red-600: #DC2F4A; color-scheme: dark;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;padding:0}
+#map{width:100%;height:calc(100% - 56px);min-height:400px}
+.bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--surface);border-bottom:2px solid var(--red-600);gap:12px;flex-wrap:wrap}
+.bar h1{font-size:1rem;font-weight:700;color:var(--red-700);white-space:nowrap}
+.fl{display:flex;gap:6px;align-items:center}
+.fb{border:none;padding:5px 14px;border-radius:16px;font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;transition:opacity .15s;color:#fff}
+.fb.off{opacity:.22}
+.fb[data-f="R"]{background:#C41E3A}
+.fb[data-f="B"]{background:#2563EB}
+.fb[data-f="G"]{background:#059669}
+.lg{display:flex;gap:10px;font-size:.7rem;color:var(--text-muted);align-items:center}
+.lg span{display:flex;align-items:center;gap:3px}
+.ld{width:10px;height:10px;border-radius:50%;border:2px solid #fff;flex-shrink:0}
+.leaflet-popup-content-wrapper{border-radius:8px!important;font-family:'DM Sans',sans-serif!important}
+.leaflet-popup-content{margin:10px 14px!important;font-size:.8rem!important;line-height:1.5!important}
+.pt{font-weight:700;font-size:.9rem;margin-bottom:2px}
+.pa{color:#888;font-size:.72rem}
+.pc{font-weight:600;margin-top:3px}
+@media(max-width:600px){.bar{height:auto;padding:8px 12px}.lg{display:none}#map{height:calc(100vh - 80px)}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <h1>Mapa Fast Mídia &times; Clientes</h1>
+  <div class="fl">
+    <button class="fb" data-f="R" onclick="tog('Rhony',this)">Rhony (90)</button>
+    <button class="fb" data-f="B" onclick="tog('Bea',this)">Bea (24)</button>
+    <button class="fb" data-f="G" onclick="tog('Gabi',this)">Gabi (16)</button>
+  </div>
+  <div class="lg">
+    <span><div class="ld" style="background:#C41E3A"></div> Casa</span>
+    <span><div class="ld" style="background:#F59E0B"></div> Agência</span>
+    <span><div class="ld" style="background:#888;width:7px;height:7px"></div> Cliente</span>
+  </div>
+</div>
+<div id="map"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+var D={"h":{"Rhony":[-3.0419,-59.9536],"Bea":[-3.0819,-60.0232],"Gabi":[-3.0509,-60.0962]},"a":[-3.0942802,-59.9936774],"c":{"Gabi":[["AMAZON OPEN MALL",3,-3.06447,-60.10012],["Morada Café",3,-3.1017,-60.00897],["Clinica Mais Vida",2,-3.10018,-60.01338],["AC Display",2,-3.10791,-60.01164],["DABELA",2,-3.1017,-60.00897],["Braga Motors",2,-3.0834,-60.0243],["CAA Tintas",2,-3.1264,-60.0118],["CAA",1,-3.03984,-60.00626],["Tuboaços",1,-3.11703,-59.98334],["Amazoncopy",1,-3.09758,-60.02305],["Colmeia no La maison",1,-3.11232,-60.01335],["CAA ALUMINIO",1,-3.12648,-59.98387],["Constrói",1,-3.27582,-60.18674],["Chilli Beans",1,-3.10402,-60.01129],["BA Elétrica",1,-3.0773,-60.0255],["Café do Norte",1,-3.1153,-59.969]],"Bea":[["CAA",11,-3.1159,-60.02738],["BA ELÉTRICA",9,-3.08033,-60.02437],["Rei das Mangueiras",7,-2.99314,-60.00774],["royal enfield",6,-3.09545,-60.04296],["STEEL PORT",5,-2.99329,-60.02252],["BMW / Braga Motors",5,-3.0834,-60.0243],["braga motors",4,-3.09146,-60.02396],["DEB Transportes",4,-3.10521,-60.05369],["Braga Motos",4,-3.087,-59.9835],["braga acessórios",3,-3.13009,-60.0079],["Millennium Shopping",3,-3.098,-60.02417],["Millennium",3,-3.08626,-60.02435],["Inforcell",3,-3.031,-59.97733],["Olá Casa Nova",3,-3.06531,-60.05721],["Unipar Construtora",3,-3.1017,-60.00897],["RODRIX",3,-3.1132,-59.98724],["braga veiculos - venda direta",2,-3.08508,-60.02385],["Rodrix Motos",2,-3.10411,-60.05547],["Hospital Santa Júlia",2,-3.11675,-60.02199],["DMelo Tintas",2,-3.08901,-60.06676],["AMZ GERADORES",1,-3.04282,-60.00516],["CAA Alumínio",1,-3.02616,-59.93412],["Amazoncopy",1,-3.1293,-59.9943],["Legacy Motos",1,-3.067,-60.0466]],"Rhony":[["Pneu Forte",58,-3.07426,-59.97144],["TUBOAÇOS",53,-3.12469,-59.98838],["COMAC",39,-3.1196,-60.01537],["Rodrigues Colchões",33,-3.03154,-59.98573],["Olá Casa Nova",32,-3.09146,-60.02396],["BRAGA MOTORS",26,-3.0834,-60.0243],["APA Móveis",18,-3.031,-59.97733],["Unipar Construtora",18,-3.098,-60.0242],["BA Elétrica (16)",16,-3.0773,-60.0255],["BA ELÉTRICA",15,-3.08033,-60.02437],["Royal Enfield",14,-3.0957,-60.04278],["Mega Popular",14,-3.0819,-60.024],["Mercadão dos óculos",13,-3.10148,-60.02415],["Amazon Industrial",13,-3.12696,-60.00183],["apa (Amazonas Shopping)",13,-3.09434,-60.02252],["Hall Center",12,-3.0731,-60.02657],["ROCHA E PAIVA",12,-2.96619,-60.02862],["Via Marconi",12,-3.07733,-60.02554],["Colmeia",12,-3.1017,-60.009],["Fredy Santos",12,-3.0773,-60.0255],["Legacy Motos",10,-3.06695,-60.04658],["CAA Alumínio",10,-3.02616,-59.93412],["Doctor Mais Saúde",10,-3.1032,-60.0281],["Chilli Beans",9,-3.10413,-60.01164],["Steel Port",8,-2.99755,-60.01642],["AÇO MANAUS",8,-3.00569,-60.02871],["Acesso Saúde",8,-3.09083,-60.0604],["clinica mais vida",7,-3.10398,-60.01333],["Santo Remédio",7,-3.08476,-60.00036],["Braga Veículos",7,-3.0905,-60.0242],["Millennium Shopping",6,-3.098,-60.02417],["Artrin",6,-3.12289,-60.00594],["Amazoncopy",6,-3.12934,-59.99428],["Constrói",6,-3.27582,-60.18674],["CAA TINTAS",5,-3.12641,-60.0118],["Orla 92",5,-3.06772,-60.0959],["Rei das Mangueiras",5,-2.99314,-60.00774],["Rodrix",4,-2.98584,-60.0055],["FECHACOM TECIDOS",4,-3.11083,-60.02372],["DMELO",4,-3.08907,-60.06117],["morada farma",4,-3.08847,-60.00371],["SIM",4,-2.98548,-60.02247],["Braga Acessórios",4,-3.03154,-59.98573],["Amazon Open Mall",4,-3.0645,-60.1001],["braga motos (yamaha)",3,-3.05697,-59.94779],["CAFÉ DO NORTE",3,-3.11528,-59.96895],["COMODARE",3,-3.12041,-59.98453],["Ivson Coelho",3,-3.06612,-60.01433],["SIM incorporadora",3,-3.03186,-60.01824],["CAA Marcenaria",3,-3.02616,-59.93412],["Fechacon Tecidos",2,-3.11495,-60.02363],["vanguarda",2,-3.09816,-59.99247],["Mais Vida",2,-3.10398,-60.01333],["Tuboaços/Amazon Industrial",2,-3.11703,-59.98334],["BEST CAR",2,-3.04721,-60.02487],["rei das mangeuiras",2,-3.12552,-60.00322],["CAA Tintas Express",2,-3.12641,-60.0118],["Rodriguez Saúde",2,-3.12185,-60.02085],["CAA Marcenaria Express",2,-3.06226,-59.99997],["Alimenta",2,-3.01253,-59.91885],["Buldogue Verde",2,-3.08995,-60.05792],["Fechacom matriz",1,-3.09529,-60.02658],["Rei da mangueiras",1,-3.13249,-60.00352],["Fechacon tecido",1,-3.11495,-60.02363],["Tubaoços",1,-3.11703,-59.98334],["LEAPMOTOR",1,-3.07733,-60.02554],["Equador Energia",1,-3.10035,-59.98328],["BRAGA MOTORS - BMW",1,-3.09146,-60.02396],["bmw braga motors",1,-3.09456,-60.02406],["CAA - Home Center",1,-3.03535,-59.99634],["AM TEC",1,-3.12817,-60.01913],["DMELO TEMPLO DAS TINTAS",1,-3.08907,-60.06117],["Búri Resort",1,-2.97589,-60.09565],["ROCHA E PAIVA (Tarumã)",1,-2.96619,-60.02862],["Via Marconi Flores",1,-3.08195,-60.02397],["CAA ALUMINIO BOULEVARD",1,-3.1159,-60.02738],["TUBAÇOS",1,-3.11703,-59.98334],["ORLA",1,-3.06772,-60.0959],["Braga Veiculos",1,-3.12847,-60.01067],["AMZ GERADORES",1,-3.04282,-60.00516],["HALL CENTER (David)",1,-3.091,-60.01208],["COMAC 14H30",1,-3.124,-60.01524],["ROCHA E PAIVA 14H30",1,-2.96619,-60.02862],["Ivson",1,-3.06612,-60.01433],["doctor mais saude",1,-3.12817,-60.01913],["IAA",1,-2.96622,-60.01411],["Acesso Saúde Compensa",1,-3.08988,-60.06096],["IAA Alumínio",1,-3.13024,-59.97853],["ARTRIN",1,-3.12086,-60.00583]]}};
+
+var COL={Rhony:'#C41E3A',Bea:'#2563EB',Gabi:'#059669'};
+var vis={Rhony:true,Bea:true,Gabi:true};
+var lyr={Rhony:[],Bea:[],Gabi:[]};
+var hm={};
+
+var map=L.map('map').setView([-3.08,-60.02],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:18}).addTo(map);
+
+function mkHome(c){
+  return L.divIcon({className:'',html:'<div style="width:30px;height:30px;border-radius:50%;background:'+c+';border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg></div>',iconSize:[30,30],iconAnchor:[15,15]});
+}
+function mkAgency(){
+  return L.divIcon({className:'',html:'<div style="display:flex;flex-direction:column;align-items:center"><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#D97706);border:3px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div><div style="margin-top:2px;background:#D97706;color:#fff;padding:1px 8px;border-radius:8px;font-size:10px;font-weight:700;font-family:DM Sans,sans-serif;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3)">VANGUARDA</div></div>',iconSize:[44,56],iconAnchor:[22,28]});
+}
+function mkCl(c,n){
+  var s=Math.min(8+Math.sqrt(n)*3,24);
+  return L.divIcon({className:'',html:'<div style="width:'+s+'px;height:'+s+'px;border-radius:50%;background:'+c+';border:2px solid rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.3);opacity:.8"></div>',iconSize:[s,s],iconAnchor:[s/2,s/2]});
+}
+
+L.marker(D.a,{icon:mkAgency(),zIndexOffset:2000}).bindPopup('<div class="pt" style="color:#D97706">Agência Vanguarda Martech</div><div class="pa">R. Constelação Cruzeiro do Sul, 432 - Aleixo</div>').addTo(map);
+
+for(var f in D.h){
+  var m=L.marker(D.h[f],{icon:mkHome(COL[f]),zIndexOffset:1000}).bindPopup('<div class="pt" style="color:'+COL[f]+'">'+f+'</div><div class="pa">Casa</div>');
+  m.addTo(map);hm[f]=m;
+}
+
+for(var f in D.c){
+  D.c[f].forEach(function(cl){
+    var m=L.marker([cl[2],cl[3]],{icon:mkCl(COL[f],cl[1])}).bindPopup('<div class="pt" style="color:'+COL[f]+'">'+cl[0]+'</div><div class="pc">'+cl[1]+' agendamento'+(cl[1]>1?'s':'')+'</div><div class="pa">Fast: '+f+'</div>');
+    m.addTo(map);lyr[f].push(m);
+  });
+}
+
+function tog(f,b){
+  vis[f]=!vis[f];b.classList.toggle('off');
+  lyr[f].forEach(function(m){if(vis[f])m.addTo(map);else map.removeLayer(m)});
+  if(vis[f])hm[f].addTo(map);else map.removeLayer(hm[f]);
+}
+</script>
+</body>
+</html>

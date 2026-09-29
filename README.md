@@ -231,20 +231,45 @@ clasp deploy --description "descrição da mudança"
 ## Estrutura de arquivos
 
 ```
-apps-script/
-├── agenda-index.html      # Frontend da agenda web (HTML/CSS/JS)
-├── agenda-webapp.gs       # doGet(), getConfigPublica(), getDisponibilidade(), criarAgendamento()
-├── agendamento.gs         # processarNovoAgendamento_() — orquestra Notion + Drive + WA
-├── briefing.gs            # onFormSubmit — atualiza Notion quando briefing é preenchido
-├── calendario.gs          # getDisponibilidadeSemana() — lê Google Calendários dos Fasts
-├── comprovante99.gs       # validarComprovantes99() — verifica comprovantes diariamente
-├── config.exemplo.gs      # Template de configuração (commitar este)
-├── config.gs              # Configuração real com tokens (NÃO commitar — gitignored)
-├── criar-forms.gs         # Helpers para criar o Google Forms programaticamente
-├── drive.gs               # buscarPastaCliente(), resolverPastaPorId()
-├── notion.gs              # notionCreatePage(), notionUpdatePage(), helpers de propriedades
-└── whatsapp.gs            # waSendText(), waSendTemplate(), waKeepAlive(), testarWhatsApp()
+apps-script/                           # Sistema de agendamento (GAS)
+├── agenda-index.html                  # Frontend da agenda web (HTML/CSS/JS)
+├── agenda-webapp.gs                   # doGet(), getConfigPublica(), getDisponibilidade(), criarAgendamento()
+├── agendamento.gs                     # processarNovoAgendamento_() — orquestra Notion + Drive + WA
+├── briefing.gs                        # onFormSubmit — atualiza Notion quando briefing é preenchido
+├── calendario.gs                      # getDisponibilidadeSemana() — lê Google Calendários dos Fasts
+├── comprovante99.gs                   # validarComprovantes99() — verifica comprovantes diariamente
+├── config.exemplo.gs                  # Template de configuração (commitar este)
+├── config.gs                          # Configuração real com tokens (NÃO commitar — gitignored)
+├── criar-forms.gs                     # Helpers para criar o Google Forms programaticamente
+├── drive.gs                           # buscarPastaCliente(), resolverPastaPorId()
+├── notion.gs                          # notionCreatePage(), notionUpdatePage(), helpers de propriedades
+└── whatsapp.gs                        # waSendText(), waSendTemplate(), waKeepAlive(), testarWhatsApp()
+
+tools/
+└── mapa-clientes/                     # Mapa interativo de distribuição geográfica
+    ├── index.html                     # Leaflet.js — casas, agência e 130 clientes
+    └── README.md                      # Documentação e instruções de uso
 ```
+
+---
+
+## Ferramentas complementares
+
+### Mapa Fast Mídia × Clientes (`tools/mapa-clientes/`)
+
+Mapa interativo com a distribuição geográfica dos 130 clientes atendidos pela equipe em Manaus. Mostra casas dos Fasts, sede da agência e clientes coloridos por Fast responsável, com tamanho proporcional ao número de agendamentos. Dados extraídos dos Google Calendars via geocodificação.
+
+→ [Documentação do mapa](tools/mapa-clientes/README.md)
+
+### Rastreamento em Tempo Real (proposta)
+
+Sistema de localização GPS ao vivo dos Fasts durante o expediente, usando Supabase (Realtime + PostgreSQL) + Vercel + OwnTracks. Integra com o mapa de clientes existente para mostrar posição atual de cada Fast sobre os pontos dos clientes.
+
+**Stack**: OwnTracks (celular) → Vercel API Route → Supabase Realtime → Dashboard Leaflet  
+**Custo adicional**: R$ 0 (usa infraestrutura já contratada pela Vanguarda)  
+**Status**: Aguardando aprovação da liderança
+
+→ [Proposta técnica completa](docs/proposta-rastreamento-realtime.md)
 
 ---
 
@@ -254,6 +279,7 @@ apps-script/
 - [`docs/fase0-checklist.md`](docs/fase0-checklist.md) — checklist de pré-requisitos
 - [`docs/forms-briefing-campos.md`](docs/forms-briefing-campos.md) — campos do Google Forms de briefing
 - [`docs/processos-operacionais.md`](docs/processos-operacionais.md) — processos da equipe Fast Mídia
+- [`docs/proposta-rastreamento-realtime.md`](docs/proposta-rastreamento-realtime.md) — proposta do sistema de rastreamento GPS
 
 ---
 
