@@ -267,7 +267,7 @@ Sistema de localização GPS ao vivo dos Fasts durante o expediente, usando Supa
 
 **Stack**: OwnTracks (celular) → Vercel API Route → Supabase Realtime → Dashboard Leaflet  
 **Custo adicional**: R$ 0 (usa infraestrutura já contratada pela Vanguarda)  
-**Status**: Aguardando aprovação da liderança
+**Status**: Aprovado — desenvolvimento agendado para 26/10 a 30/10/2026
 
 → [Proposta técnica completa](docs/proposta-rastreamento-realtime.md)
 

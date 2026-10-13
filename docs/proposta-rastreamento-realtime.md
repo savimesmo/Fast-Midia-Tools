@@ -1,10 +1,10 @@
 # Proposta: Rastreamento em Tempo Real dos Fasts
 
-> **Status**: Proposta  
-> **Prioridade**: Media  
-> **Dependencia**: Aprovacao da lideranca + acesso ao Supabase/Vercel da Vanguarda  
+> **Status**: Aprovado — desenvolvimento agendado  
+> **Periodo**: 26/10/2026 a 30/10/2026  
+> **Dependencia**: Acesso ao Supabase/Vercel da Vanguarda  
 > **Autor**: Diana Savi  
-> **Data**: Setembro 2026
+> **Data**: Setembro 2026 (aprovado Outubro 2026)
 
 ---
 
@@ -163,7 +163,9 @@ O rastreamento complementa o sistema de agendamento (Apps Script) sem modifica-l
 
 ## Plano de implementacao
 
-### Fase 1 — MVP (1-2 dias de desenvolvimento)
+**Semana de desenvolvimento: 26/10 a 30/10/2026**
+
+### Fase 1 — MVP (seg 26/10 – ter 27/10)
 
 1. Criar tabela `fast_locations` no Supabase
 2. Criar API Route `/api/location` na Vercel
@@ -171,18 +173,19 @@ O rastreamento complementa o sistema de agendamento (Apps Script) sem modifica-l
 4. Adaptar o mapa de clientes para mostrar posicao ao vivo
 5. Deploy do dashboard na Vercel
 
-### Fase 2 — Producao (1 dia)
+### Fase 2 — Producao (qua 28/10 – qui 29/10)
 
 6. Configurar OwnTracks nos 3 Fasts
 7. Adicionar autenticacao por Fast (tokens individuais)
 8. Conectar dominio personalizado (ex: `mapa.vanguardamartech.com.br`)
+9. Testes em campo com os Fasts
 
-### Fase 3 — Melhorias (opcional)
+### Fase 3 — Melhorias (sex 30/10 + backlog)
 
-9. Historico de posicoes (trilha do dia)
-10. Sobreposicao com eventos do Google Calendar
-11. Alertas: Fast parado por muito tempo, fora da area de Manaus
-12. Integracao com Notion: mostrar job atual do Fast no popup
+10. Historico de posicoes (trilha do dia)
+11. Sobreposicao com eventos do Google Calendar
+12. Alertas: Fast parado por muito tempo, fora da area de Manaus
+13. Integracao com Notion: mostrar job atual do Fast no popup
 
 ---
 
@@ -209,8 +212,8 @@ O rastreamento complementa o sistema de agendamento (Apps Script) sem modifica-l
 
 ## Proximos passos
 
-Apos aprovacao da lideranca:
+Antes de 26/10:
 
 1. Obter acesso ao projeto Supabase da Vanguarda (URL + chaves)
 2. Obter acesso ao projeto Vercel da Vanguarda (ou criar sub-projeto)
-3. Iniciar Fase 1 do desenvolvimento
+3. Resolver decisoes pendentes acima com a lideranca
